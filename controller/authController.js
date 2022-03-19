@@ -4,10 +4,14 @@ const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 
-const signToken = (id) => {
-  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPRIE,
-  });
+const signToken = (id, name, lastName) => {
+  return jwt.sign(
+    { id: id, firstName: name, lastName: lastName },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPRIE,
+    }
+  );
 };
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
@@ -21,7 +25,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     address: req.body.address,
     phoneNum: req.body.phoneNum,
   });
-  const token = signToken(newUser._id);
+  const token = signToken(newUser._id, newUser.firstName, newUser.lastName);
 
   delete newUser.password;
   res.status(201).json({
@@ -47,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("username or password is incorrect"), 401);
   }
 
-  const token = signToken(user._id);
+  const token = signToken(user._id, user.firstName, user.lastName);
 
   res.status(201).json({
     status: "success",
