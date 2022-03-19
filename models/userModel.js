@@ -68,6 +68,10 @@ const userSchema = mongoose.Schema({
     type: Date,
     required: [true, "user must have date of birth"],
   },
+  imageUrl: {
+    type: String,
+    default: "",
+  },
 });
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

@@ -31,6 +31,9 @@ exports.signup = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     token,
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    imageUrl: newUser.imageUrl,
     data: {
       user: newUser,
     },
@@ -55,6 +58,9 @@ exports.login = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
+    firstName: user.firstName,
+    lastName: user.lastName,
+    imageUrl: user.imageUrl,
     token,
   });
 });
